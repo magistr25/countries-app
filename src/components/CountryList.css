@@ -1,0 +1,22 @@
+.custom-card {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Добавляем переходы */
+}
+
+.custom-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button {
+    background-color: rgb(83, 91, 242);
+    border-color: rgb(83, 91, 242);
+}
+
+.custom-button:hover {
+    background-color: rgb(63, 71, 222);
+    border-color: rgb(63, 71, 222);
+}
+
