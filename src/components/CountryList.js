@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Spinner, Alert, Card, Form } from 'react-bootstrap';
-import { fetchCountries } from '../features/countries/countriesSlice'; // Импортируем действие из нашего среза
-import './CountryList.css'; // Добавим кастомные стили
+import { fetchCountries } from '../features/countries/countriesSlice';
+import './CountryList.css';
 
 const CountryList = () => {
     const dispatch = useDispatch();
-    const countries = useSelector((state) => state.countries.countries); // Извлекаем только необходимые данные
+    const countries = useSelector((state) => state.countries.countries);
     const status = useSelector((state) => state.countries.status);
     const error = useSelector((state) => state.countries.error);
-    const [searchTerm, setSearchTerm] = useState(''); // Добавляем состояние для ключевого слова поиска
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        if (status === 'idle') { // Проверяем, загружены ли данные
+        if (status === 'idle') {
             dispatch(fetchCountries());
         }
     }, [dispatch, status]);
@@ -53,12 +53,12 @@ const CountryList = () => {
             <div className="row">
                 {filteredCountries.map((country) => (
                     <div key={country.cca3} className="col-md-4 mb-3">
-                        <Card className="custom-card"> {/* Используем кастомный класс */}
+                        <Card className="custom-card">
                             <Card.Body>
                                 <Card.Title>{country.name.common}</Card.Title>
                                 <Link
                                     to={`/country/${country.cca3}`}
-                                    className="btn btn-primary custom-button"  // Используем кастомный класс
+                                    className="btn btn-primary custom-button"
                                 >
                                     View Details
                                 </Link>
