@@ -13,16 +13,21 @@ const CountryList = () => {
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        if (status === 'idle') {
+        if (status === 'idle' && countries.length === 0) {
             dispatch(fetchCountries());
         }
-    }, [dispatch, status]);
+    }, [dispatch, status, countries.length]);
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    const filteredCountries = countries.filter((country) =>
+    // Сортировка стран по алфавиту
+    const sortedCountries = countries.slice().sort((a, b) =>
+        a.name.common.localeCompare(b.name.common)
+    );
+
+    const filteredCountries = sortedCountries.filter((country) =>
         country.name.common.toLowerCase().startsWith(searchTerm.toLowerCase())
     );
 
@@ -72,4 +77,3 @@ const CountryList = () => {
 };
 
 export default CountryList;
-

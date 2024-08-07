@@ -1,39 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import { Card, Spinner, Alert } from 'react-bootstrap';
 import './CountryDetails.css';
-import {fetchCountries} from "../features/countries/countriesSlice";
+import { fetchCountries } from '../features/countries/countriesSlice';
 
 const CountryDetails = () => {
     const { cca3 } = useParams();
     const countries = useSelector((state) => state.countries.countries);
+    const status = useSelector((state) => state.countries.status);
+    const error = useSelector((state) => state.countries.error);
     const dispatch = useDispatch();
-
     const [country, setCountry] = useState(null);
-    const [status, setStatus] = useState('idle');
-    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchCountry = async () => {
-            setStatus('loading');
-            try {
-                const response = await axios.get(`https://restcountries.com/v3.1/alpha/${cca3}`);
-                setCountry(response.data[0]);
-                setStatus('succeeded');
-            } catch (err) {
-                setError(err.message);
-                setStatus('failed');
-            }
-        };
-
-        if (!countries.length) {
+        if (status === 'idle') {
             dispatch(fetchCountries());
+        } else {
+            const selectedCountry = countries.find((country) => country.cca3 === cca3);
+            setCountry(selectedCountry);
         }
+    }, [dispatch, status, countries, cca3]);
 
-        fetchCountry();
-    }, [cca3, countries.length, dispatch]);
+    useEffect(() => {
+        if (status === 'succeeded') {
+            const selectedCountry = countries.find((country) => country.cca3 === cca3);
+            setCountry(selectedCountry);
+        }
+    }, [status, countries, cca3]);
 
     if (status === 'loading') {
         return (
@@ -46,7 +40,7 @@ const CountryDetails = () => {
     }
 
     if (status === 'failed') {
-        return <Alert variant="danger">Error: {error}</Alert>;
+        return <Alert variant="danger">{error}</Alert>;
     }
 
     if (!country) {
@@ -69,7 +63,7 @@ const CountryDetails = () => {
                 <Card.Text><strong>Subregion:</strong> {subregion}</Card.Text>
                 <Card.Text><strong>Languages:</strong> {languages}</Card.Text>
                 <Card.Text><strong>Borders:</strong> {borders}</Card.Text>
-                <Card.Img src={country.flags.png} alt={`${country.name.common} flag`} className="img-fluid" style={{ width: '150px' }} />
+                <Card.Img  src={country.flags.png} alt={`${country.name.common} flag`} className="img-fluid" style={{ width: '150px' }} />
             </Card.Body>
         </Card>
     );
